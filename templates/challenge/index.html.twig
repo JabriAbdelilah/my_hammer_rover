@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {% if error is defined %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% elseif results is defined %}
+        <div class="mt-5 text-success">
+            Final Rovers' positions:
+            <ul>
+                {% for result in results %}
+                    <li>{{ result }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {{ form_start(form, {'action': path('app_challenge'), 'method': 'POST'}) }}
+
+    <div class="row mt-5 d-flex justify-content-center">
+        <div class="mb-3 col-md-7">
+            {{ form_label(form.plateauCoordinates) }}
+            {{ form_widget(form.plateauCoordinates) }}
+        </div>
+    </div>
+
+    <div id="rover-fields-list"
+         class="row mt-5 d-flex justify-content-center"
+         data-prototype="{{ form_widget(form.roverPositions.vars.prototype)|e }}"
+         data-widget-tags="{{ '<div class="mb-2 col-md-7"></div>'|e }}"
+         data-widget-counter="{{ form.roverPositions|length }}">
+    </div>
+
+
+    <div class="row d-flex justify-content-center">
+        <button type="button"
+                class="add-another-collection-widget btn btn-primary w-25"
+                data-list-selector="#rover-fields-list"
+        >
+            Add a rover
+        </button>
+    </div>
+    {% do form.roverPositions.setRendered %}
+    {{ form_end(form) }}
+
+{% endblock %}
